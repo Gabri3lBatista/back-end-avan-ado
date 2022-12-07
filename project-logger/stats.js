@@ -1,55 +1,24 @@
 const os = require('os')
-const { stringify } = require('querystring')
-const log = require('./logger')
+const log = require('./logger.js')
 
-const { freemem, totalmem } = os
+setInterval( () => { 
+    const { freemem, totalmem } = os
 
+    const total = parseInt(totalmem()/1024/1024)
+    const freeMem = parseInt(freemem()/1024/1024)
+    const usage = total - freeMem
+    const percents = parseInt((usage/total) * 100)
 
-const total = parseInt(totalmem()/1024/1024)
+    const stats = {
+        total: `${total} MB`,
+        freeMem: `${freeMem} MB`,
+        percents: `${percents}% em uso`
+    }
+    console.clear()
+    console.log('++++++ MEMORY STATS +++++++')
+    console.table(stats)
 
-const free = parseInt(freemem()/1024/1024)
-
-console.log(`${free}MB, ${total}MB`)
-
-const usage = total - free 
-
-const por = parseInt(usage/total) * 100
-
-console.log(`${por}MB, ${total}MB`)
-
-const stats = {
-    total: `${total}`,
-    freeMem: `${free}`,
-    percents: `${por}% em uso`
-}
-
-console.table(stats)
-
-setInterval(()=>{
-    
-const { freemem, totalmem } = os
-
-
-const total = parseInt(totalmem()/1024/1024)
-
-const free = parseInt(freemem()/1024/1024)
-
-
-const usage = total - free 
-
-const por = parseInt((usage/total) * 100)
-
-console.log(`${por}MB, ${total}MB`)
-
-const stats = {
-    total: `${total}`,
-    freeMem: `${free}`,
-    percents: `${por}% em uso`
-}
-console.clear()
-
-//chama a função que transfere o que está em stats para um arquivo txt 
-log(`kkf`, JSON.stringify(stats))
-
-}, 1000)
-
+    // COMENTAR O QUE O MÉTODO LOG FAZ
+    log('Rodando...', JSON.stringify(stats))
+        
+} , 1000)
