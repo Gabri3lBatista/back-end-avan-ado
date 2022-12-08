@@ -1,6 +1,7 @@
 const ul = document.querySelector('ul')
 const input = document.querySelector('input')
 const form = document.querySelector('form')
+import writeFile from '../api/index.js'
 
 // Função que carrega o conteúdo da API.
 //async function load() {
@@ -13,12 +14,34 @@ const form = document.querySelector('form')
 
 //load()
 
-function addElement(???) {
-    ???
+async function load(){
+    const res = await fetch( 'http://localhost:3000').then( data => data.json())
+    res.urls.map(({name, url}) => addElement({name,url}))
+
+    
+}
+load()
+
+function addElement({ name, url }) {
+    const li = document.createElement('li')
+    const a = document.createElement("a")
+    const trash = document.createElement("span")
+
+    a.href = url
+    a.innerHTML = name
+    a.target = "_blank"
+
+    trash.innerHTML = "x"
+    trash.onclick = () => removeElement(trash)
+
+    li.append(a)
+    li.append(trash)
+    ul.append(li)
 }
 
-function removeElement(element) {
-    ???
+function removeElement(el) {
+    if (confirm('Tem certeza que deseja deletar?'))
+        el.parentNode.remove()
 }
 
 form.addEventListener('submit', (event) => {
